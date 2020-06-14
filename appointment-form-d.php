@@ -27,9 +27,9 @@ if ( !class_exists( 'AppointmentFormD' ) ) {
     class AppointmentFormD 
     {
         public function __construct() {
-            register_activation_hook( $this, 'activate' );
-            register_deactivation_hook( $this, 'deactivate' );
-            register_uninstall_hook( $this, 'uninstall' );
+            register_activation_hook( array($this, 'activate') );
+            register_deactivation_hook( array($this, 'deactivate') );
+            register_uninstall_hook( array($this, 'uninstall') );
         }
 
         /*
@@ -68,6 +68,20 @@ if ( !class_exists( 'AppointmentFormD' ) ) {
             // // drop a custom database table
             // global $wpdb;
             // $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}mytable");
+        }
+
+        public function admin_scripts() {
+
+            $types = $this->get_post_types();
+    
+            $screen	= get_current_screen();
+    
+            if ( in_array( $screen->post_type , $types ) ) :
+    
+                wp_enqueue_style( 'wpcmn-admin', plugins_url('lib/css/admin.css', __FILE__), array(), WPCMN_VER, 'all' );
+    
+            endif;
+    
         }
 
         public function textdomain() {
